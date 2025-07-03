@@ -54,7 +54,9 @@ export const useJiraApi = () => {
     if (!config) throw new Error("Not connected to Jira");
     
     const auth = btoa(`${config.email}:${config.apiToken}`);
-    const url = `https://${config.domain}/rest/agile/1.0${endpoint}`;
+    // Clean domain by removing any protocol prefix and trailing slashes
+    const cleanDomain = config.domain.replace(/^https?:\/\//, '').replace(/\/$/, '');
+    const url = `https://${cleanDomain}/rest/agile/1.0${endpoint}`;
     
     const response = await fetch(url, {
       headers: {
